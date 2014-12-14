@@ -17,6 +17,7 @@ func_begin_script () {
 	echo "6. Check network details."
 	echo "7. Update software repository list."
 	echo "8. Upgrade packages."
+	echo "9. Check which services are enabled at boot."
 	echo "_____________________________________________________"
 	echo ""
 
@@ -31,6 +32,7 @@ func_begin_script () {
 		6 | 06 ) ;;
 		7 | 07 ) func_update_repo ;;
 		8 | 08 ) func_upgrade_packages ;;
+		9 | 09 ) func_services_enabled_at_boot ;;
 		* ) echo "WRONG input." ;;
 	esac
 	echo ""
@@ -130,11 +132,25 @@ func_update_git_src () {
 } # end of the function func_update_git_src()
 
 
+#function to check which services are enabled at boot
+func_services_enabled_at_boot () {
+	echo ""
+
+	R=$(runlevel  | awk '{ print $2}')
+	for s in /etc/rc${R}.d/*;
+	do
+		basename $s | grep '^S' | sed 's/S[0-9].//g' ;
+	done
+}
+
+
+#----TODO----#
 # Give me usual updates
 # ie; music tracks on musicforprogramming.net
 # ie; weather update of Bangalore city
 # ie; news headlines from google news page
 
 # HELP on using this script
+#------------#
 
 func_begin_script
